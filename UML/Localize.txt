@@ -1,0 +1,27 @@
+title Localize Module
+
+participant Core
+participant Module
+participant Localize
+
+Core->Localize:InitializeLocalize()
+Localize-->Core:Initialized? (Y/N)
+
+Module->Localize:GetInstance()
+Localize-->Module:Localize Instance
+
+Module->Localize:SetLocale(locale)
+Localize-->Module:Locale Set? (Y/N)
+
+Module->Localize:Translate(string*)
+Localize-->Module: String Translated? (Y/N)
+
+Module->Localize:TranslateLocale(string*, locale)
+Localize-->Module: String Translated? (Y/N)
+
+Module->Localize:GetCurrentLocale()
+Localize-->Module: Current Locale
+
+
+Core->Localize:UnnitializeLocalize()
+Localize-->Core:Uninitialized? (Y/N)
