@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include "LocalizeExports.h"
+#include <boost/locale.hpp>
+// Boost Requries `Linker`->`Additional Library Directories` to contain a path to the boost libraries on the system. i.e. <Path_To_Boost>\boost_1_78_0\stage\lib
+// Boost Requires `C/C++`->`Additional Include Directories` to contain a path to boost on the system. i.e. <Path_To_Boost>\boost_1_78_0
 
 
 class LOCALIZE_API Localize 
@@ -36,7 +39,8 @@ public:
 	/// </summary>
 	/// <param name="locale">The locale to be set</param>
 	/// <returns>True if locale is set, False if not</returns>
-	bool SetLocale(std::string locale);
+	/// NOTE: Currently supports English and German
+	bool SetLocale(const std::string& locale);
 	
 	/// <summary>
 	/// Returns the currently set locale
@@ -49,7 +53,7 @@ public:
 	/// </summary>
 	/// <param name="str">[in/out]The string to be translated, and the translated string if successful</param>
 	/// <returns>True if the translation was successful, false if not</returns>
-	bool Translate(std::string* str);
+	bool Translate(std::string& str);
 
 	/// <summary>
 	/// Translate the given string according to the provided locale
@@ -58,12 +62,13 @@ public:
 	/// <param name="locale">The locale to translate</param>
 	/// <returns>True if the translation is successful, False if not</returns>
 	/// @note locale is NOT set persistently, it is only used for this one translation
-	bool TranslateLocale(std::string* str, std::string locale);
+	bool TranslateLocale(std::string& str, const std::string& locale);
 
 private:
 	Localize();
-	std::string m_locale;
 	bool initialized;
+	std::string locale;
+	boost::locale::generator gen;
 
 	// Private constructor so class cannot be directly instantiated
 };

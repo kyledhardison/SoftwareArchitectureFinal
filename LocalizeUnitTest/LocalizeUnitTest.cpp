@@ -49,8 +49,8 @@ namespace LocalizeUnitTest
 
 			Localize* localize = Localize::GetInstance();
 
-			// TODO add a valid locale
-			Assert::IsFalse(localize->SetLocale("TODO"));
+			// A valid locale
+			Assert::IsFalse(localize->SetLocale("en.UTF-8"));
 		}
 
 		/// <summary>
@@ -65,8 +65,8 @@ namespace LocalizeUnitTest
 
 			Localize::InitializeLocalize();
 
-			//TODO: add a valid Locale
-			Assert::IsTrue(localize->SetLocale("TODO"));
+			// A valid Locale
+			Assert::IsTrue(localize->SetLocale("en.UTF-8"));
 		}
 
 		/// <summary>
@@ -95,11 +95,12 @@ namespace LocalizeUnitTest
 
 			Localize::InitializeLocalize();
 
-			// TODO Add a valid non-default locale
-			Assert::IsTrue(localize->SetLocale("TODO"));
+			// A valid non-default locale
+			Assert::IsTrue(localize->SetLocale("de_DE.UTF-8"));
 			
-			// TODO Add the same valid locale here
-			Assert::IsTrue(localize->GetLocale().compare("TODO"));
+			// The same valid locale here
+			std::string str = localize->GetLocale();
+			Assert::IsTrue(str == "de_DE.UTF-8");
 		}
 
 		/// <summary>
@@ -113,7 +114,7 @@ namespace LocalizeUnitTest
 			std::string str("Test String");
 			Localize* localize = Localize::GetInstance();
 
-			Assert::IsFalse(localize->Translate(&str));
+			Assert::IsFalse(localize->Translate(str));
 		}
 
 		/// <summary>
@@ -130,7 +131,7 @@ namespace LocalizeUnitTest
 
 			Localize::InitializeLocalize();
 
-			Assert::IsFalse(localize->Translate(&str));
+			Assert::IsFalse(localize->Translate(str));
 		}
 
 		/// <summary>
@@ -144,17 +145,17 @@ namespace LocalizeUnitTest
 
 			// TODO add these strings to the translation database
 			std::string str("Test String");
-			std::string translatedStr("Translated String");
+			std::string translatedStr("English Translated String");
 			Localize* localize = Localize::GetInstance();
 
 			Localize::InitializeLocalize();
 
-			// TODO Add a valid locale for translation
-			localize->SetLocale("TODO");
+			// A valid locale for translation
+			localize->SetLocale("en.UTF-8");
 
-			Assert::IsTrue(localize->Translate(&str));
+			Assert::IsTrue(localize->Translate(str));
 
-			Assert::IsTrue(str.compare(translatedStr));
+			Assert::IsTrue(str == translatedStr);
 		}
 
 		/// <summary>
@@ -166,11 +167,11 @@ namespace LocalizeUnitTest
 			Localize::UninitializeLocalize();
 
 			std::string str("Test String");
-			// TODO Add a valid non-default locale
-			std::string locale("TODO");
+			// A valid non-default locale
+			std::string locale("de_DE.UTF-8");
 			Localize* localize = Localize::GetInstance();
 
-			Assert::IsFalse(localize->TranslateLocale(&str, locale));
+			Assert::IsFalse(localize->TranslateLocale(str, locale));
 		}
 
 		/// <summary>
@@ -183,18 +184,18 @@ namespace LocalizeUnitTest
 			Localize::UninitializeLocalize();
 
 			std::string str("Test String");
-			std::string translatedStr("Translated String");
+			std::string translatedStr("German Translated String");
 
-			// TODO Add a valid non-default locale
-			std::string locale("TODO");
+			// A valid non-default locale
+			std::string locale("de_DE.UTF-8");
 
 			Localize* localize = Localize::GetInstance();
 
 			Localize::InitializeLocalize();
 
-			Assert::IsTrue(localize->TranslateLocale(&str, locale));
+			Assert::IsTrue(localize->TranslateLocale(str, locale));
 
-			Assert::IsTrue(str.compare(translatedStr));
+			Assert::IsTrue(str == translatedStr);
 		}
 
 	};

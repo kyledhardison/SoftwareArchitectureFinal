@@ -33,4 +33,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="de.po">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="en.po">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
