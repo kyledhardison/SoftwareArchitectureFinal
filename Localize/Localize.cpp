@@ -107,25 +107,83 @@ bool Localize::Translate(const std::string& str, std::string &result)
 	}
 
 }
-/*
-bool Localize::TranslateLocale(const char* str, const char* locale)
+
+bool Localize::Translate(const std::string& context, const std::string& str, std::string& result)
 {
-	// Do the translation according to the locale passed in the 2nd arg, return true/false
 	Localize* instance = Localize::GetInstance();
 
 	if (!instance->initialized) {
 		return false;
 	}
 
-	// Translated string should be put in str param
-	const char* temp = boost::locale::translate(str).str(locale);
+	// Call the Boost Translation function
+	result.clear();
+	result = boost::locale::translate(context, str);
 
-	if (temp == str) {
-		str = temp;
+	// Check if a translation occured (does NOT check for a successful translation)
+	if (result != str) {
 		return true;
 	}
 	else {
 		return false;
-	}	
+	}
+
 }
-*/
+
+// Future Support (Does not actually translate)
+bool Localize::TranslateLocale(const std::string& str, std::string& result, const std::string& locale)
+{
+	Localize* instance = Localize::GetInstance();
+
+	if (!instance->initialized) {
+		return false;
+	}
+
+	// Validate locale
+	if (locale != "en.UTF-8" && locale != "de_DE.UTF-8") {
+		// Unsupported Locale
+		return false;
+	}
+
+	// Call the Boost Translation function
+	result.clear();
+	result = boost::locale::translate(str).str(locale);
+
+	// Check if a translation occured (does NOT check for a successful translation)
+	if (result != str) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+// Future TODO Fix (Does not actually translate)
+bool Localize::TranslateLocale(const std::string& context, const std::string& str, std::string& result,
+	const std::string& locale)
+{
+	Localize* instance = Localize::GetInstance();
+
+	if (!instance->initialized) {
+		return false;
+	}
+
+	// Validate locale
+	if (locale != "en.UTF-8" && locale != "de_DE.UTF-8") {
+		// Unsupported Locale
+		return false;
+	}
+
+	// Call the Boost Translation function
+	result.clear();
+	result = boost::locale::translate(context, str).str(locale);
+
+	// Check if a translation occured (does NOT check for a successful translation)
+	if (result != str) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}

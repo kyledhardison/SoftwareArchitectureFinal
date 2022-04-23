@@ -41,7 +41,8 @@ public:
 	static bool UninitializeLocalize();
 
 	/// <summary>
-	///		Set the current locale. NOTE: Currently supports English ("en.UTF-8") and German ("de_DE.UTF-8") locales.
+	///		Set the current locale. NOTE: Currently supports English ("en.UTF-8") and 
+	///		German ("de_DE.UTF-8") locales.
 	/// </summary>
 	/// <param name="locale">
 	///		The locale to be set
@@ -73,19 +74,65 @@ public:
 	/// </returns>
 	static bool Translate(const std::string& str, std::string& result);
 
-	/*
 	/// <summary>
-	/// Translate the given string according to the provided locale
+	///		Translate the given string according to the current locale
 	/// </summary>
-	/// <param name="str">[in/out] The string to be translated, and the translated string if successful</param>
-	/// <param name="locale">The locale to translate</param>
-	/// <returns>True if the translation is successful, False if not</returns>
+	/// <param name="context">
+	///		The context for the translation
+	/// </param>
+	/// <param name="str">
+	///		The string to be translated
+	/// </param>
+	/// <param name="result">
+	///		The translated string
+	/// <param>
+	/// <returns>
+	///		True if a translation occured, false if not
+	/// </returns>
+	static bool Translate(const std::string& context, const std::string& str, std::string& result);
+
+	// Future TODO: Fix Implementation
+	/// <summary>
+	///	 Translate the given string according to the provided locale
+	/// </summary>
+	/// <param name="str">
+	///		The string to be translated
+	/// </param>
+	/// <param name="result">
+	///		The translated string
+	/// <param>
+	/// <param name="locale">
+	///		The locale to use for translation
+	/// </param>
+	/// <returns>
+	///		True if a translation occured, false if not
+	/// </returns>
 	/// @note locale is NOT set persistently, it is only used for this one translation
-	bool LocalizeTranslate(const char* str, const char* locale);
+	static bool TranslateLocale(const std::string& str, std::string& result, const std::string& locale);
 
+	// Future TODO: Fix Implementation
+	/// <summary>
+	///	 Translate the given string according to the provided locale
+	/// </summary>
+	/// <param name="context">
+	///		The context for the translation
+	/// </param>
+	/// <param name="str">
+	///		The string to be translated
+	/// </param>
+	/// <param name="result">
+	///		The translated string
+	/// <param>
+	/// <param name="locale">
+	///		The locale to use for translation
+	/// </param>
+	/// <returns>
+	///		True if a translation occured, false if not
+	/// </returns>
+	/// @note locale is NOT set persistently, it is only used for this one translation
+	static bool TranslateLocale(const std::string& context, const std::string& str, std::string& result,
+		const std::string& locale);
 
-	LocalizeTranslateLocale(const char* str, const char* locale);
-	*/
 
 private:
 	Localize();

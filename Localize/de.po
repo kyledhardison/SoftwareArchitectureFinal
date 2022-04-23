@@ -19,3 +19,7 @@ msgstr ""
 
 msgid "Test String"
 msgstr "German Translated String"
+
+msgctxt "Test Context"
+msgid "Test Context String"
+msgstr "German Translated Context String"
