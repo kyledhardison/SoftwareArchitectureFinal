@@ -17,6 +17,5 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: Localize.cpp:116
 msgid "Test String"
 msgstr "English Translated String"

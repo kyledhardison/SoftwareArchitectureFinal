@@ -5,6 +5,13 @@ Localize::Localize() {}
 
 Localize::~Localize() {}
 
+Localize* Localize::GetInstance()
+{
+	static Localize instance;
+
+	return &instance;
+}
+
 bool Localize::InitializeLocalize()
 {
 	Localize* instance = Localize::GetInstance();
@@ -12,17 +19,21 @@ bool Localize::InitializeLocalize()
 	if (instance->initialized) {
 		return false;
 	}
-	// Initialize needed boost stuff
+
+	// Initialize Boost generator
+	instance->generator = new boost::locale::generator();
 	
-	// Specify location of dictionaries
-	instance->gen.add_messages_path("C:\\Users\\jpbro\\Documents\\develop\\SoftwareArch\\FinalProject\\SoftwareArchitectureFinal\\Localize"); // Path to .mo file
-	instance->gen.add_messages_domain("Localize"); // Name of .mo file
+	// Specify location of Boost Dictionaries
+	instance->generator->add_messages_path("C:\\Users\\jpbro\\Documents\\develop\\SoftwareArch\\FinalProject\\SoftwareArchitectureFinal\\Localize"); // Path to .mo file
+	instance->generator->add_messages_domain("Localize"); // Name of .mo file
 
-	// Use instance->SetLocale() - set the default locale here (english)
-	instance->SetLocale("en.UTF-8");
-
+	// Set the default locale (english)
+	instance->locale = "en.UTF-8";
+	std::locale::global((*instance->generator)(instance->locale));
+	std::cout.imbue(std::locale());
+	
 	instance->initialized = true;
-
+	
 	return true;
 }
 
@@ -33,22 +44,16 @@ bool Localize::UninitializeLocalize()
 	if (!instance->initialized) {
 		return false;
 	}
-	// Uninitialize any boost stuff that's needed
-	instance->locale = "";
-
+	
+	// Uninitialize everything
+	instance->locale = std::string();
+	delete instance->generator;
 	instance->initialized = false;
 
 	return true;
 }
 
-Localize* Localize::GetInstance()
-{
-	static Localize instance;
-
-	return &instance;
-}
-
-bool Localize::SetLocale(const std::string& locale)
+bool Localize::SetLocale(const std::string locale)
 {
 	Localize* instance = Localize::GetInstance();
 
@@ -56,15 +61,15 @@ bool Localize::SetLocale(const std::string& locale)
 		return false;
 	}
 	
+	// Validate locale
 	if (locale != "en.UTF-8" && locale != "de_DE.UTF-8") {
 		// Unsupported Locale
 		return false;
 	}
-
-	instance->locale = locale;
-
+	
 	// Generate locales and imbue them to iostream
-	std::locale::global(instance->gen(locale));
+	instance->locale = locale;
+	std::locale::global((*instance->generator)(instance->locale));
 	std::cout.imbue(std::locale());
 	
 	return true;
@@ -75,26 +80,26 @@ std::string Localize::GetLocale()
 	Localize* instance = Localize::GetInstance();
 
 	if (!instance->initialized) {
-		return "";
+		return std::string();
 	}
 
 	return instance->locale;
 }
 
-bool Localize::Translate(std::string& str)
+bool Localize::Translate(const std::string& str, std::string &result)
 {
-	// Do the translation according to the currently set locale, return true/false
 	Localize* instance = Localize::GetInstance();
 	
 	if (!instance->initialized) {
 		return false;
 	}
-
-	// Translated string should be put in str param
-	std::string temp = boost::locale::translate("translate_string1");
 	
-	if (temp == str) {
-		str = temp;
+	// Call the Boost Translation function
+	result.clear();
+	result = boost::locale::translate(str);
+	
+	// Check if a translation occured (does NOT check for a successful translation)
+	if (result != str) {
 		return true;
 	}
 	else {
@@ -102,8 +107,8 @@ bool Localize::Translate(std::string& str)
 	}
 
 }
-
-bool Localize::TranslateLocale(std::string& str, const std::string& locale)
+/*
+bool Localize::TranslateLocale(const char* str, const char* locale)
 {
 	// Do the translation according to the locale passed in the 2nd arg, return true/false
 	Localize* instance = Localize::GetInstance();
@@ -113,7 +118,7 @@ bool Localize::TranslateLocale(std::string& str, const std::string& locale)
 	}
 
 	// Translated string should be put in str param
-	std::string temp = boost::locale::translate("translate_string2").str(locale);
+	const char* temp = boost::locale::translate(str).str(locale);
 
 	if (temp == str) {
 		str = temp;
@@ -123,3 +128,4 @@ bool Localize::TranslateLocale(std::string& str, const std::string& locale)
 		return false;
 	}	
 }
+*/

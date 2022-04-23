@@ -172,6 +172,10 @@
       <Project>{6b3d784a-5a77-4c7b-a661-65430a5d17bb}</Project>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Localize\de.po" />
+    <None Include="..\Localize\en.po" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
