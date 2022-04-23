@@ -7,8 +7,9 @@ int main()
     std::cout << "Hello World!\n";
     AutomationAPI::Session* mySession = AutomationAPI::Session::GetSession();
 AutomationAPI::Part * Part1 = mySession->MakePart("d:\workdir\someDir\SomeName.part");
-AutomationAPI::Blockbuilder * Blockbuilder1 = Part1->CreateBlockBuilder(nullptr);
-Blockbuilder1->SetType();
+Part1->MakeWidgetFeature();
 Part1->Save();
+AutomationAPI::Part * Part2 = mySession->OpenPart("C:\Users\jpbro\Documents\develop\SoftwareArch\FinalProject\SoftwareArchitectureFinal\SampleVersionUp.prt");
+Part2->Save();
 
 }

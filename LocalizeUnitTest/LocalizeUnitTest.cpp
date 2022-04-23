@@ -10,153 +10,299 @@ namespace LocalizeUnitTest
 	public:
 		
 		/// <summary>
-		/// Ensure that Localize can only be initialized once
+		///		Ensure that Localize can only be initialized once.
 		/// </summary>
 		TEST_METHOD(InitializeTest)
 		{
-			// Uninitialize test to start
+			// Uninitialize Localize
 			Localize::UninitializeLocalize();
 
+			// Verify that InitializeLocalize returns true
 			Assert::IsTrue(Localize::InitializeLocalize());
 
+			// Verify that the second call to InitializeLocalize returns false
 			Assert::IsFalse(Localize::InitializeLocalize());
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
+
 		}
 
 		/// <summary>
-		/// Ensure that Localize can only be initialized once
+		///		Ensure that Localize can only be uninitialized once.
 		/// </summary>
 		TEST_METHOD(UninitializeTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
-
+			// Initialize Localize
 			Localize::InitializeLocalize();
 
+			// Verify Uninitialize returns true
 			Assert::IsTrue(Localize::UninitializeLocalize());
 
+			// Verify Uninitialize returns false
 			Assert::IsFalse(Localize::UninitializeLocalize());
 
+			// Verify Uninitialize returns false
 			Assert::IsFalse(Localize::UninitializeLocalize());
+
 		}
 
 		/// <summary>
-		/// Ensure that SetLocale fails if Localize is uninitialized
+		///		Ensure that SetLocale returns false if Localize is uninitialized.
 		/// </summary>
 		TEST_METHOD(SetLocaleUninitializedTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
+			// Test Variables
+			std::string englishLocale("en.UTF-8");
 
+			// Do NOT Initialize Localize
+
+			// Get the Localize Instance
 			Localize* localize = Localize::GetInstance();
 
-			// TODO add a valid locale
-			Assert::IsFalse(localize->SetLocale("TODO"));
+			// Verify that SetLocale returns false if Localize is uninitialized
+			Assert::IsFalse(localize->SetLocale(englishLocale));
+
 		}
 
 		/// <summary>
-		/// Ensure that SetLocale returns successfully if Localize is initialized
+		///		Ensure that SetLocale returns false with a unsupported locale.
 		/// </summary>
-		TEST_METHOD(SetLocaleTest)
+		TEST_METHOD(SetLocaleInvalidTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
+			// Test Variables
+			std::string frenchLocale("fr_FR.UTF-8");
 
-			Localize* localize = Localize::GetInstance();
-
+			// Initialize Localize
 			Localize::InitializeLocalize();
 
-			//TODO: add a valid Locale
-			Assert::IsTrue(localize->SetLocale("TODO"));
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
+
+			// Verify that SetLocale returns false with an unsupported locale
+			Assert::IsFalse(localize->SetLocale(frenchLocale));
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
+		}
+		
+		/// <summary>
+		///		Ensure that SetLocale returns true with a supported locale.
+		/// </summary>
+		TEST_METHOD(SetLocaleValidTest)
+		{
+			// Test Variables
+			std::string englishLocale("en.UTF-8");
+			std::string germanLocale("de_DE.UTF-8");
+			
+			// Initialize Localize
+			Localize::InitializeLocalize();
+
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
+
+			// Verify that SetLocale returns true with a supported locale
+			Assert::IsTrue(localize->SetLocale(englishLocale));
+
+			// Verify that SetLocale returns true with a supported locale
+			Assert::IsTrue(localize->SetLocale(germanLocale));
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
 		}
 
 		/// <summary>
-		/// Ensure that GetLocale returns an empty string if Localize is uninitialized
+		///		Ensure that GetLocale returns an empty string if Localize is uninitialized.
 		/// </summary>
 		TEST_METHOD(GetLocaleUninitializedTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
+			// Do NOT Initialize Localize
 
+			// Get the Localize Instance
 			Localize* localize = Localize::GetInstance();
 
+			// Verify that GetLocale returns null while localize is uninitialized
 			Assert::IsTrue(localize->GetLocale().empty());
+			
 		}
 
 		/// <summary>
-		/// Ensure that GetLocale returns true if locale was set successfully
-		/// Ensure that GetLocale returns the set locale if locale has been set
+		///		Ensure that GetLocale returns the set locale.
+		///		Ensure that SetLocale can change the locale.
+		///		Ensure that GetLocale returns the set locale.
 		/// </summary>
 		TEST_METHOD(GetLocaleTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
+			// Test Variables
+			std::string str;
+			std::string englishLocale("en.UTF-8");
+			std::string germanLocale("de_DE.UTF-8");
 
-			Localize* localize = Localize::GetInstance();
-
+			// Initialize Localize
 			Localize::InitializeLocalize();
 
-			// TODO Add a valid non-default locale
-			Assert::IsTrue(localize->SetLocale("TODO"));
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
+
+			// Get the default locale
+			str = localize->GetLocale();
+
+			// Verify that the default locale is correct
+			Assert::IsTrue(str == englishLocale);
+
+			// Set a valid non-default locale
+			Assert::IsTrue(localize->SetLocale(germanLocale));
 			
-			// TODO Add the same valid locale here
-			Assert::IsTrue(localize->GetLocale().compare("TODO"));
+			// Get the non-default locale
+			str = localize->GetLocale();
+
+			// Verify that the non-default locale is correct
+			Assert::IsTrue(str == germanLocale);
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
 		}
 
 		/// <summary>
-		/// Ensure that Translate returns false if Localize is uninitialized
+		///		Ensure that Translate returns false if Localize is uninitialized.
 		/// </summary>
 		TEST_METHOD(TranslateUninitializedTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
-
+			// Test Variables
 			std::string str("Test String");
+			std::string result("Result String");
+			std::string expectedTranslation("Result String");
+
+			// Do NOT Initialize Localize
+
+			// Get the Localize Instance
 			Localize* localize = Localize::GetInstance();
 
-			Assert::IsFalse(localize->Translate(&str));
+			// Verify localize->Translate returns false
+			Assert::IsFalse(localize->Translate(str, result));
+
+			// Verify that the translation did not occur
+			Assert::IsTrue(result == expectedTranslation);
+			
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
 		}
 
 		/// <summary>
-		/// Ensure that Translate returns false for a string that is not in the translation database
+		///		Ensure that Translate returns false for a string that is not in the English dictionary.
 		/// </summary>
-		TEST_METHOD(TranslateInvalidStringTest)
+		TEST_METHOD(TranslateEnglishInvalidStringTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
-
-			// DO NOT add this string to the translation database
-			std::string str("Test String that is not in the database");
-			Localize* localize = Localize::GetInstance();
-
+			// Test Variables
+			std::string str("String NOT in the English dictonary"); // DO NOT add this string to the English dictionary
+			std::string result("Result String");
+			std::string expectedTranslation("String NOT in the English dictonary");
+			 
+			// Initialize Localize
 			Localize::InitializeLocalize();
 
-			Assert::IsFalse(localize->Translate(&str));
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
+
+			// Verify localize->Translate returns false
+			Assert::IsFalse(localize->Translate(str, result));
+
+			// Verify that the translation did not occur
+			Assert::IsTrue(result == expectedTranslation);
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
 		}
 
 		/// <summary>
-		/// Ensure that Translate returns true for a string that is in the database
-		/// Ensure that the string is properly translated
+		///		Ensure that Translate returns false for a string that is not in the German dictionary.
 		/// </summary>
-		TEST_METHOD(TranslateTest)
+		TEST_METHOD(TranslateGermanInvalidStringTest)
 		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
+			// Test Variables
+			std::string str("String NOT in the German dictonary"); // DO NOT add this string to the German dictionary
+			std::string result("Result String");
+			std::string expectedTranslation("String NOT in the German dictonary");
+			std::string locale("de_DE.UTF-8");
 
-			// TODO add these strings to the translation database
-			std::string str("Test String");
-			std::string translatedStr("Translated String");
-			Localize* localize = Localize::GetInstance();
-
+			// Initialize Localize
 			Localize::InitializeLocalize();
 
-			// TODO Add a valid locale for translation
-			localize->SetLocale("TODO");
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
 
-			Assert::IsTrue(localize->Translate(&str));
+			// Set the German locale for translation
+			localize->SetLocale(locale);
 
-			Assert::IsTrue(str.compare(translatedStr));
+			// Verify localize->Translate returns false
+			Assert::IsFalse(localize->Translate(str, result));
+
+			// Verify that the translation did not occur
+			Assert::IsTrue(result == expectedTranslation);
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
 		}
 
+		/// <summary>
+		///		Ensure that Translate returns true for a string that is in the English dictionary.
+		///		Ensure that the string is properly translated.
+		/// </summary>
+		TEST_METHOD(TranslateEnglishValidStringTest)
+		{
+			// Test Variables
+			std::string str("Test String"); // Must be in the English Dictionary
+			std::string result("Result String");
+			std::string expectedTranslation("English Translated String");
+
+			// Initialize Localize
+			Localize::InitializeLocalize();
+
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
+
+			// Verify localize->Translate returns true
+			Assert::IsTrue(localize->Translate(str, result));
+
+			// Verify that the translation is correct
+			Assert::IsTrue(result == expectedTranslation);
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
+		}
+		
+		/// <summary>
+		///		Ensure that Translate returns true for a string that is in the German dictionary.
+		///		Ensure that the string is properly translated.
+		/// </summary>
+		TEST_METHOD(TranslateGermanValidStringTest)
+		{
+			// Test Variables
+			std::string str("Test String"); // Must be in the German Dictionary
+			std::string result("Result String");
+			std::string expectedTranslation("German Translated String");
+			std::string locale("de_DE.UTF-8");
+
+			// Initialize Localize
+			Localize::InitializeLocalize();
+
+			// Get the Localize Instance
+			Localize* localize = Localize::GetInstance();
+
+			// Set the German locale for translation
+			localize->SetLocale(locale);
+			
+			// Verify localize->Translate returns true
+			Assert::IsTrue(localize->Translate(str, result));
+
+			// Verify that the translation is correct
+			Assert::IsTrue(result == expectedTranslation);
+
+			// Uninitialize Localize
+			Localize::UninitializeLocalize();
+		}
+
+		/* TODO Get working, then re-enable
 		/// <summary>
 		/// Ensure that TranslateLocale returns false if Localize is uninitialized
 		/// </summary>
@@ -166,36 +312,18 @@ namespace LocalizeUnitTest
 			Localize::UninitializeLocalize();
 
 			std::string str("Test String");
-			// TODO Add a valid non-default locale
-			std::string locale("TODO");
+			std::string result("Result String");
+			// A valid non-default locale
+			std::string locale("de_DE.UTF-8");
 			Localize* localize = Localize::GetInstance();
 
-			Assert::IsFalse(localize->TranslateLocale(&str, locale));
+			Assert::IsFalse(localize->TranslateLocale(str, locale));
 		}
 
-		/// <summary>
-		/// Ensure that TranslateLocale returns true for a string that is in the database
-		/// Ensure that the string is properly translated according to the locale passed
-		/// </summary>
-		TEST_METHOD(TranslateLocaleTest)
-		{
-			// Uninitialize test to start
-			Localize::UninitializeLocalize();
+		// New test
+		//TODO: re-add this test for translationLocal (if we support it)
 
-			std::string str("Test String");
-			std::string translatedStr("Translated String");
-
-			// TODO Add a valid non-default locale
-			std::string locale("TODO");
-
-			Localize* localize = Localize::GetInstance();
-
-			Localize::InitializeLocalize();
-
-			Assert::IsTrue(localize->TranslateLocale(&str, locale));
-
-			Assert::IsTrue(str.compare(translatedStr));
-		}
-
+		// Assert::IsTrue(localize->TranslateLocale(str, locale));
+		*/
 	};
 }
